@@ -1,10 +1,5 @@
 <template>
-    <div class="ww-tabs-new-container">
-        <p>Active tab: {{ internalActiveTab }}</p>
-        <wwElement class="ww-tab-list" v-bind="content.tabList" />
-
-        <wwElement v-for="tabContent in content.tabContentElements" :key="tabContent" v-bind="tabContent" />
-    </div>
+    <wwLayout path="tabContent" />
 </template>
 
 <script>
@@ -59,12 +54,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.ww-tabs-new-container {
-    background-color: purple;
-    padding: 10px;
-
-    .ww-tab-trigger {
-        background-color: blue;
-    }
-}
 </style>
