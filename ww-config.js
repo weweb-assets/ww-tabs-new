@@ -17,21 +17,21 @@ export default {
             type: 'TextRadioGroup',
             options: {
                 choices: [
-                    { value: 'horizontal', title: { en: 'Horizontal', fr: 'Horizontal' } },
-                    { value: 'vertical', title: { en: 'Vertical', fr: 'Vertical' } },
+                    { value: 'horizontal', label: { en: 'Horizontal', fr: 'Horizontal' } },
+                    { value: 'vertical', label: { en: 'Vertical', fr: 'Vertical' } },
                 ],
             },
-            defaultValue: 'center',
+            defaultValue: 'horizontal',
         },
-        mode: {
+        activationMode: {
             label: {
                 en: 'Mode',
             },
             type: 'TextRadioGroup',
             options: {
                 choices: [
-                    { value: 'auto', title: { en: 'Auto', fr: 'Auto' } },
-                    { value: 'manual', title: { en: 'Manual', fr: 'Manuel' } },
+                    { value: 'auto', label: { en: 'Auto', fr: 'Auto' } },
+                    { value: 'manual', label: { en: 'Manual', fr: 'Manuel' } },
                 ],
             },
             defaultValue: 'auto',

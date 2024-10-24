@@ -21,6 +21,7 @@ export default {
         return {
             tabTriggers: [],
             internalActiveTab: this.content.defaultActiveTab,
+            focusTab: '',
         };
     },
     computed: {
@@ -32,12 +33,22 @@ export default {
                 this.internalActiveTab = newValue;
             },
         },
+        computedActivationMode() {
+            return this.content.activationMode;
+        },
+        computedLoadAllTabs() {
+            return this.content.loadAllTabs;
+        },
     },
     watch: {},
-    mounted() {},
+    mounted() {
+    },
     methods: {
         setActiveTab(tabName) {
             this.computedActiveTab = tabName;
+        },
+        setFocusTab(tabName) {
+            this.focusTab = tabName;
         },
         registerTabTrigger(tabName, element) {
             this.tabTriggers.push({ id: tabName, element });
@@ -48,13 +59,15 @@ export default {
             const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
 
             if (event.key === prevKey || event.key === nextKey) {
-                const currentIndex = this.tabTriggers.findIndex(tab => tab.id === this.computedActiveTab);
+                console.log('focusTab ', this.focusTab);
+                const currentIndex = this.tabTriggers.findIndex(tab => tab.id === (this.focusTab || this.computedActiveTab));
+                console.log('currentIndex ', currentIndex);
                 const newIndex =
                     event.key === prevKey
                         ? (currentIndex - 1 + this.tabTriggers.length) % this.tabTriggers.length
                         : (currentIndex + 1) % this.tabTriggers.length;
-
-                this.setActiveTab(this.tabTriggers[newIndex].id);
+                console.log('newIndex ', newIndex);
+                this.setFocusTab(this.tabTriggers[newIndex].id);
                 this.tabTriggers[newIndex].element.focus();
             }
         },
@@ -64,8 +77,9 @@ export default {
             activeTabProvided: computed(() => this.computedActiveTab),
             setActiveTab: this.setActiveTab,
             registerTabTrigger: this.registerTabTrigger,
-            activationMode: this.content.activationMode,
-            loadAllTabs: this.content.loadAllTabs,
+            activationMode: computed(() => this.computedActivationMode),
+            loadAllTabs: computed(() => this.computedLoadAllTabs),
+            setFocusTab: this.setFocusTab,
         };
     },
     mounted() {
