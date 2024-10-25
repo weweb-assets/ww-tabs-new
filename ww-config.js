@@ -3,11 +3,20 @@ export default {
         label: {
             en: 'Tabs',
         },
-        icon: 'slider',         // 📛 TODO
+        icon: 'slider', // 📛 TODO
         bubble: {
-            icon: 'slider',     // 📛 TODO
+            icon: 'slider', // 📛 TODO
         },
         customSettingsPropertiesOrder: [],
+        hint: (_, sidepanelContent) => {
+            if(sidepanelContent.missingTabOrField) {
+                return {
+                    type: 'warning',
+                    header: sidepanelContent.missingTabOrField.header,
+                    text: sidepanelContent.missingTabOrField.text,
+                };
+            }
+        },
     },
     triggerEvents: [
         {
@@ -19,11 +28,11 @@ export default {
                 newValue: '',
                 oldValue: '',
             },
-        }
+        },
     ],
     actions: [
         {
-            label: 'Set active tab', 
+            label: 'Set active tab',
             action: 'setActiveTab',
             args: [
                 {
@@ -66,7 +75,7 @@ export default {
             },
             type: 'Text',
             options: {
-                nullable: true
+                nullable: true,
             },
             bindable: true,
             responsive: true,
@@ -84,7 +93,14 @@ export default {
         },
         tabContent: {
             hidden: true,
-            defaultValue: []
+            defaultValue: [],
         },
+        /* wwEditor:start */
+        missingTabOrField: {
+            hidden: true,
+            defaultValue: false,
+            editorOnly: true,
+        },
+        /* wwEditor:end */
     },
 };

@@ -4,6 +4,9 @@
 
 <script>
 import { computed, ref } from 'vue';
+/* wwEditor:start */
+import useTabsHint from './editor/useTabsHint';
+/* wwEditor:end */
 
 export default {
     components: {},
@@ -17,7 +20,11 @@ export default {
         wwElementState: { type: Object, required: true },
     },
     emits: [],
-    setup(props) {
+    setup(props, { emit }) {
+        /* wwEditor:start */
+        const { registerTab, unregisterTab, registerContent, unregisterContent, changeTabName, changeContentName } = useTabsHint(emit);
+        /* wwEditor:end */
+
         const { value: activeTab, setValue: setActiveTab } = wwLib.wwVariable.useComponentVariable({
             uid: props.uid,
             name: 'activeTab',
@@ -28,11 +35,20 @@ export default {
         return {
             activeTab,
             setActiveTab,
+            /* wwEditor:start */
+            registerTab,
+            unregisterTab,
+            registerContent,
+            unregisterContent,
+            changeTabName, 
+            changeContentName
+            /* wwEditor:end */
         };
     },
     data() {
         return {
             tabTriggers: [],
+            tabContents: [],
         };
     },
     computed: {
@@ -80,17 +96,29 @@ export default {
         },
         registerTabTrigger(tabName, element) {
             this.tabTriggers.push({ id: tabName, element, focus: false });
+            /* wwEditor:start */
+            this.registerTab(tabName);
+            /* wwEditor:end */
         },
+        /* wwEditor:start */
+        unregisterTab(tabName) {
+            this.tabTriggers = this.tabTriggers.filter(tab => tab.id !== tabName);
+        },
+        registerContent(tabName) {
+            this.tabContents.push(tabName);
+        },
+        unregisterContent(tabName) {
+            this.tabContents = this.tabContents.filter(tab => tab !== tabName);
+        },
+        /* wwEditor:end */
         handleKeyDown(event) {
             const isVertical = this.content.orientation === 'vertical';
             const prevKey = isVertical ? 'ArrowUp' : 'ArrowLeft';
             const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
 
             if (event.key === prevKey || event.key === nextKey) {
-                const currentIndex = this.tabTriggers.findIndex(
-                    tab => tab.id === (this.getFocusTab())
-                );
-                if(currentIndex === -1) {
+                const currentIndex = this.tabTriggers.findIndex(tab => tab.id === this.getFocusTab());
+                if (currentIndex === -1) {
                     return;
                 }
                 const newIndex =
@@ -109,6 +137,13 @@ export default {
             loadAllTabs: computed(() => this.computedLoadAllTabs),
             onBlurTab: this.handleBlurTab,
             registerTabTrigger: this.registerTabTrigger,
+            /* wwEditor:start */
+            unregisterTabTrigger: this.unregisterTab,
+            registerTabContent: this.registerContent,
+            unregisterTabContent: this.unregisterContent,
+            changeTabName: this.changeTabName,
+            changeContentName: this.changeContentName,
+            /* wwEditor:end */
             setActiveTab: this.setActiveTab,
             setFocusTab: this.setFocusTab,
         };
