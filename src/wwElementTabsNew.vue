@@ -77,7 +77,6 @@ export default {
         },
         handleBlurTab(tabName) {
             this.tabTriggers.find(tab => tab.id === tabName).focus = false;
-            console.log('handleBlurTab ', tabName, this.getFocusTab());
         },
         registerTabTrigger(tabName, element) {
             this.tabTriggers.push({ id: tabName, element, focus: false });
@@ -88,19 +87,16 @@ export default {
             const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
 
             if (event.key === prevKey || event.key === nextKey) {
-                console.log('focusTab ', this.getFocusTab());
                 const currentIndex = this.tabTriggers.findIndex(
                     tab => tab.id === (this.getFocusTab())
                 );
                 if(currentIndex === -1) {
                     return;
                 }
-                console.log('currentIndex ', currentIndex);
                 const newIndex =
                     event.key === prevKey
                         ? (currentIndex - 1 + this.tabTriggers.length) % this.tabTriggers.length
                         : (currentIndex + 1) % this.tabTriggers.length;
-                console.log('newIndex ', newIndex);
                 this.setFocusTab(this.tabTriggers[newIndex].id);
                 this.tabTriggers[newIndex].element.focus();
             }
@@ -108,13 +104,13 @@ export default {
     },
     provide() {
         return {
-            activeTabProvided: computed(() => this.computedActiveTab),
-            setActiveTab: this.setActiveTab,
-            registerTabTrigger: this.registerTabTrigger,
             activationMode: computed(() => this.computedActivationMode),
+            activeTabProvided: computed(() => this.computedActiveTab),
             loadAllTabs: computed(() => this.computedLoadAllTabs),
-            setFocusTab: this.setFocusTab,
             onBlurTab: this.handleBlurTab,
+            registerTabTrigger: this.registerTabTrigger,
+            setActiveTab: this.setActiveTab,
+            setFocusTab: this.setFocusTab,
         };
     },
     mounted() {
