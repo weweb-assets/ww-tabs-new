@@ -9,6 +9,18 @@ export default {
         },
         customSettingsPropertiesOrder: [],
     },
+    triggerEvents: [
+        {
+            name: 'onValueChanged',
+            label: {
+                en: 'On value changed',
+            },
+            event: {
+                newValue: '',
+                oldValue: '',
+            },
+        }
+    ],
     properties: {
         orientation: {
             label: {

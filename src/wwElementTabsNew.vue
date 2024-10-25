@@ -40,9 +40,18 @@ export default {
             return this.content.loadAllTabs;
         },
     },
-    watch: {},
-    mounted() {
+    watch: {
+        computedActiveTab: {
+            immediate: true,
+            handler(newValue, oldValue) {
+                this.$emit('trigger-event', {
+                    name: 'onValueChanged',
+                    event: { newValue: newValue, oldValue: oldValue },
+                });
+            },
+        },
     },
+    mounted() {},
     methods: {
         setActiveTab(tabName) {
             this.computedActiveTab = tabName;
@@ -60,7 +69,9 @@ export default {
 
             if (event.key === prevKey || event.key === nextKey) {
                 console.log('focusTab ', this.focusTab);
-                const currentIndex = this.tabTriggers.findIndex(tab => tab.id === (this.focusTab || this.computedActiveTab));
+                const currentIndex = this.tabTriggers.findIndex(
+                    tab => tab.id === (this.focusTab || this.computedActiveTab)
+                );
                 console.log('currentIndex ', currentIndex);
                 const newIndex =
                     event.key === prevKey
