@@ -8,6 +8,7 @@ import { computed, ref } from 'vue';
 export default {
     components: {},
     props: {
+        uid: { type: String, required: true },
         content: { type: Object, required: true },
         /* wwEditor:start */
         wwFrontState: { type: Object, required: true },
@@ -16,21 +17,31 @@ export default {
         wwElementState: { type: Object, required: true },
     },
     emits: [],
-    setup(props) {},
+    setup(props) {
+        const { value: activeTab, setValue: setActiveTab } = wwLib.wwVariable.useComponentVariable({
+            uid: props.uid,
+            name: 'activeTab',
+            type: 'string',
+            defaultValue: computed(() => String(props.content.defaultActiveTab || '')),
+        });
+
+        return {
+            activeTab,
+            setActiveTab,
+        };
+    },
     data() {
         return {
             tabTriggers: [],
-            internalActiveTab: this.content.defaultActiveTab,
-            focusTab: '',
         };
     },
     computed: {
         computedActiveTab: {
             get() {
-                return this.internalActiveTab;
+                return this.activeTab;
             },
             set(newValue) {
-                this.internalActiveTab = newValue;
+                this.setActiveTab(newValue);
             },
         },
         computedActivationMode() {
@@ -57,10 +68,19 @@ export default {
             this.computedActiveTab = tabName;
         },
         setFocusTab(tabName) {
-            this.focusTab = tabName;
+            this.tabTriggers.forEach(tab => {
+                tab.focus = tab.id === tabName;
+            });
+        },
+        getFocusTab() {
+            return this.tabTriggers.find(tab => tab.focus)?.id || '';
+        },
+        handleBlurTab(tabName) {
+            this.tabTriggers.find(tab => tab.id === tabName).focus = false;
+            console.log('handleBlurTab ', tabName, this.getFocusTab());
         },
         registerTabTrigger(tabName, element) {
-            this.tabTriggers.push({ id: tabName, element });
+            this.tabTriggers.push({ id: tabName, element, focus: false });
         },
         handleKeyDown(event) {
             const isVertical = this.content.orientation === 'vertical';
@@ -68,10 +88,13 @@ export default {
             const nextKey = isVertical ? 'ArrowDown' : 'ArrowRight';
 
             if (event.key === prevKey || event.key === nextKey) {
-                console.log('focusTab ', this.focusTab);
+                console.log('focusTab ', this.getFocusTab());
                 const currentIndex = this.tabTriggers.findIndex(
-                    tab => tab.id === (this.focusTab || this.computedActiveTab)
+                    tab => tab.id === (this.getFocusTab())
                 );
+                if(currentIndex === -1) {
+                    return;
+                }
                 console.log('currentIndex ', currentIndex);
                 const newIndex =
                     event.key === prevKey
@@ -91,6 +114,7 @@ export default {
             activationMode: computed(() => this.computedActivationMode),
             loadAllTabs: computed(() => this.computedLoadAllTabs),
             setFocusTab: this.setFocusTab,
+            onBlurTab: this.handleBlurTab,
         };
     },
     mounted() {
