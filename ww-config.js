@@ -21,6 +21,18 @@ export default {
             },
         }
     ],
+    actions: [
+        {
+            label: 'Set active tab', 
+            action: 'setActiveTab',
+            args: [
+                {
+                    name: 'Tab name',
+                    type: 'Text',
+                },
+            ],
+        },
+    ],
     properties: {
         orientation: {
             label: {
