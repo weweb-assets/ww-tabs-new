@@ -137,18 +137,16 @@ export default {
         /* wwEditor:end */
 
         wwLib.wwElement.useRegisterElementLocalContext(
-            'tabs',
+            'Tab',
             {},
             {
                 goToNextTab: {
-                    description: 'Go to the next tab',
                     method: setNextActiveTab,
-                    editor: { label: 'Next', elementName: 'Button', icon: 'arrow-right' },
+                    editor: { label: 'Next', elementName: 'Tab', description: 'Go to the next tab', icon: 'arrow-right' },
                 },
                 goToPrevTab: {
-                    description: 'Go to the previous tab',
                     method: setPrevActiveTab,
-                    editor: { label: 'Previous', elementName: 'Button', icon: 'arrow-left' },
+                    editor: { label: 'Previous', elementName: 'Tab', description: 'Go to the previous tab', icon: 'arrow-left' },
                 },
             }
         );
