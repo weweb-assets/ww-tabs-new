@@ -97,7 +97,6 @@ export default {
 
         // Event listeners
         onMounted(() => {
-            console.log('onMounted >>>>>');
             wwLib.getFrontWindow().addEventListener('keydown', handleKeyDown);
         });
         onUnmounted(() => {

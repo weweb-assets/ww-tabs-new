@@ -8,36 +8,29 @@ export default function useTabsHint(emit) {
 
     function hintRegisterTab(id) {
         state.registeredTabs.push(id);
-        console.log('func registerTab', state.registeredTabs);
     }
 
     function hintUnregisterTab(id) {
         state.registeredTabs.splice(state.registeredTabs.indexOf(id), 1);
-        console.log('func unregisterTab', state.registeredTabs);
     }
 
     function hintChangeTabName(oldId, newId) {
         state.registeredTabs.splice(state.registeredTabs.indexOf(oldId), 1, newId);
-        console.log('func changeTabName', state.registeredTabs);
     }
 
     function hintRegisterContent(id) {
         state.registeredContent.push(id);
-        console.log('func registerContent', state.registeredContent);
     }
 
     function hintUnregisterContent(id) {
         state.registeredContent.splice(state.registeredContent.indexOf(id), 1);
-        console.log('func unregisterContent', state.registeredContent);
     }
 
     function hintChangeContentName(oldId, newId) {
         state.registeredContent.splice(state.registeredContent.indexOf(oldId), 1, newId);
-        console.log('func changeContentName', state.registeredContent);
     }
 
     const missingTabOrField = computed(() => {
-        console.log('missingTabOrField', state.registeredTabs, state.registeredContent);
         // Check if there are any tab missing for the content
         const missingTabList = state.registeredContent.filter(content => !state.registeredTabs.includes(content));
 
