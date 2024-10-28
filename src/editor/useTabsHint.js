@@ -6,32 +6,32 @@ export default function useTabsHint(emit) {
         registeredContent: [],
     });
 
-    function registerTab(id) {
+    function hintRegisterTab(id) {
         state.registeredTabs.push(id);
         console.log('func registerTab', state.registeredTabs);
     }
 
-    function unregisterTab(id) {
+    function hintUnregisterTab(id) {
         state.registeredTabs.splice(state.registeredTabs.indexOf(id), 1);
         console.log('func unregisterTab', state.registeredTabs);
     }
 
-    function changeTabName(oldId, newId) {
+    function hintChangeTabName(oldId, newId) {
         state.registeredTabs.splice(state.registeredTabs.indexOf(oldId), 1, newId);
         console.log('func changeTabName', state.registeredTabs);
     }
 
-    function registerContent(id) {
+    function hintRegisterContent(id) {
         state.registeredContent.push(id);
         console.log('func registerContent', state.registeredContent);
     }
 
-    function unregisterContent(id) {
+    function hintUnregisterContent(id) {
         state.registeredContent.splice(state.registeredContent.indexOf(id), 1);
         console.log('func unregisterContent', state.registeredContent);
     }
 
-    function changeContentName(oldId, newId) {
+    function hintChangeContentName(oldId, newId) {
         state.registeredContent.splice(state.registeredContent.indexOf(oldId), 1, newId);
         console.log('func changeContentName', state.registeredContent);
     }
@@ -77,5 +77,5 @@ export default function useTabsHint(emit) {
 
     provide('_wwTabsMissingTabOrFieldObj', missingTabOrField);
 
-    return { registerTab, unregisterTab, registerContent, unregisterContent, changeTabName, changeContentName };
+    return { hintRegisterTab, hintUnregisterTab, hintChangeTabName, hintRegisterContent, hintUnregisterContent, hintChangeContentName };
 }

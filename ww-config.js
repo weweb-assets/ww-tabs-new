@@ -9,7 +9,7 @@ export default {
         },
         customSettingsPropertiesOrder: [],
         hint: (_, sidepanelContent) => {
-            if(sidepanelContent.missingTabOrField) {
+            if (sidepanelContent.missingTabOrField) {
                 return {
                     type: 'warning',
                     header: sidepanelContent.missingTabOrField.header,
@@ -17,6 +17,25 @@ export default {
                 };
             }
         },
+    },
+    actions: [
+        {
+            label: 'Open a tab',
+            action: 'setActiveTab',
+            args: [
+                {
+                    name: 'tabName',
+                    type: 'Text',
+                },
+            ],
+        },
+    ],
+    inherit: {
+        type: "ww-layout",
+    },
+    options: {
+        autoByContent: true,
+        displayAllowedValues: ["flex", "grid"],
     },
     triggerEvents: [
         {
