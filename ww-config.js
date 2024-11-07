@@ -3,9 +3,9 @@ export default {
         label: {
             en: 'Tabs',
         },
-        icon: 'slider', // 📛 TODO
+        icon: 'tabs',
         bubble: {
-            icon: 'slider', // 📛 TODO
+            icon: 'tabs',
         },
         customSettingsPropertiesOrder: [],
         hint: (_, sidepanelContent) => {
@@ -74,6 +74,9 @@ export default {
                 ],
             },
             defaultValue: 'horizontal',
+            propertyHelp: {
+                tooltip: "Whether the tabs should be navigated using the horizontal or vertical arrow keys.",
+            },
         },
         activationMode: {
             label: {
@@ -87,10 +90,13 @@ export default {
                 ],
             },
             defaultValue: 'auto',
+            propertyHelp: {
+                tooltip: "If set to `Auto`, the tabs will be activated when the corresponding trigger is focused by navigating with `Tab`, arrow keys or otherwise.",
+            },
         },
         defaultActiveTab: {
             label: {
-                en: 'Default value',
+                en: 'Initial value',
             },
             type: 'Text',
             options: {
@@ -109,6 +115,9 @@ export default {
             defaultValue: true,
             bindable: true,
             responsive: true,
+            propertyHelp: {
+                tooltip: "If set to `true`, all tabs will be loaded when the page loads instead of loading each one when it's set to active.",
+            },
         },
         tabContent: {
             hidden: true,
