@@ -9,13 +9,7 @@ export default {
         },
         customSettingsPropertiesOrder: [],
         hint: (_, sidepanelContent) => {
-            if (sidepanelContent.missingTabOrField) {
-                return {
-                    type: 'warning',
-                    header: sidepanelContent.missingTabOrField.header,
-                    text: sidepanelContent.missingTabOrField.text,
-                };
-            }
+            return sidepanelContent.missingTabOrField;
         },
     },
     actions: [
@@ -31,11 +25,11 @@ export default {
         },
     ],
     inherit: {
-        type: "ww-layout",
+        type: 'ww-layout',
     },
     options: {
         autoByContent: true,
-        displayAllowedValues: ["flex", "grid"],
+        displayAllowedValues: ['flex', 'grid'],
     },
     triggerEvents: [
         {
@@ -62,6 +56,30 @@ export default {
         },
     ],
     properties: {
+        tabContent: {
+            label: {
+                en: 'Items',
+                fr: 'Items',
+            },
+            type: 'Info',
+            options: {
+                text: { en: 'Elements to repeat' },
+            },
+            bindable: 'repeatable',
+            defaultValue: [],
+            bindingValidation: {
+                validations: [
+                    {
+                        type: 'array',
+                    },
+                    {
+                        type: 'object',
+                    },
+                ],
+                tooltip:
+                    'A collection or an array of data: \n\n`myCollection` or `[{}, {}, ...] || ["string1", "string2", ...] || [1, 2, ...]`',
+            },
+        },
         orientation: {
             label: {
                 en: 'Orientation',
@@ -73,9 +91,18 @@ export default {
                     { value: 'vertical', label: { en: 'Vertical', fr: 'Vertical' } },
                 ],
             },
+            bindable: true,
+            bindingValidation: {
+                validations: [
+                    {
+                        type: 'string',
+                    },
+                ],
+                tooltip: '`horizontal` or `vertical`',
+            },
             defaultValue: 'horizontal',
             propertyHelp: {
-                tooltip: "Whether the tabs should be navigated using the horizontal or vertical arrow keys.",
+                tooltip: 'Whether the tabs should be navigated using the horizontal or vertical arrow keys.',
             },
         },
         activationMode: {
@@ -89,9 +116,19 @@ export default {
                     { value: 'manual', label: { en: 'Manual', fr: 'Manuel' } },
                 ],
             },
+            bindingValidation: {
+                validations: [
+                    {
+                        type: 'string',
+                    },
+                ],
+                tooltip: '`auto` or `manual`',
+            },
+            bindable: true,
             defaultValue: 'auto',
             propertyHelp: {
-                tooltip: "If set to `Auto`, the tabs will be activated when the corresponding trigger is focused by navigating with `Tab`, arrow keys or otherwise.",
+                tooltip:
+                    'If set to `Auto`, the tabs will be activated when the corresponding trigger is focused by navigating with `Tab`, arrow keys or otherwise.',
             },
         },
         defaultActiveTab: {
@@ -116,12 +153,9 @@ export default {
             bindable: true,
             responsive: true,
             propertyHelp: {
-                tooltip: "If set to `true`, all tabs will be loaded when the page loads instead of loading each one when it's set to active.",
+                tooltip:
+                    "If set to `true`, all tabs will be loaded when the page loads instead of loading each one when it's set to active.",
             },
-        },
-        tabContent: {
-            hidden: true,
-            defaultValue: [],
         },
         /* wwEditor:start */
         missingTabOrField: {

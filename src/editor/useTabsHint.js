@@ -38,27 +38,51 @@ export default function useTabsHint(emit) {
         const missingFieldList = state.registeredTabs.filter(tab => !state.registeredContent.includes(tab));
 
         // Check if there are double tabs or content
-        const doubleTabList = state.registeredTabs.filter((item, index) => state.registeredTabs.indexOf(item) !== index);
-        const doubleContentList = state.registeredContent.filter((item, index) => state.registeredContent.indexOf(item) !== index);
+        const doubleTabList = state.registeredTabs.filter(
+            (item, index) => state.registeredTabs.indexOf(item) !== index
+        );
+        const doubleContentList = state.registeredContent.filter(
+            (item, index) => state.registeredContent.indexOf(item) !== index
+        );
 
-        if (missingTabList.length || missingFieldList.length || doubleTabList.length || doubleContentList.length) {
-            return {
-                header: 'Tabs configuration issues :',
+        const hints = [];
+
+        if (missingTabList.length) {
+            hints.push({
+                header: 'Missing triggers associated with contents',
                 text: `
-                    ${missingTabList.length ? 'Missing Tab Trigger for some of your content<br>' : ''}
-                    ${missingTabList.length ? `- ${missingTabList}<br>` : ''}
-                    ${missingFieldList.length ? 'Missing Tab Content for some of your triggers<br>' : ''}
-                    ${missingFieldList.length ? `- ${missingFieldList}<br>` : ''}
-                    ${doubleTabList.length ? 'Double Tab Trigger names<br>' : ''}
-                    ${doubleTabList.length ? `- ${doubleTabList}<br>` : ''}
-                    ${doubleContentList.length ? 'Double Tab Content names<br>' : ''}
-                    ${doubleContentList.length ? `- ${doubleContentList}<br>` : ''}
+                    ${missingTabList.length ? `${missingTabList}` : ''}
                 `,
-            };
+            });
+        }
+        if (missingFieldList.length) {
+            hints.push({
+                header: 'Missing contents associated with triggers',
+                text: `
+                    ${missingFieldList.length ? `${missingFieldList}` : ''}
+                  
+                `,
+            });
+        }
+        if (doubleContentList.length) {
+            hints.push({
+                header: 'Duplicate triggers',
+                text: `
+                    ${doubleTabList.length ? `${doubleTabList}` : ''}
+                `,
+            });
+        }
+        if (doubleContentList.length) {
+            hints.push({
+                header: 'Duplicate contents',
+                text: `
+                    ${doubleContentList.length ? `${doubleContentList}` : ''}
+                `,
+            });
         }
 
-        return null;
-    })
+        return hints
+    });
 
     watch(
         missingTabOrField,
@@ -70,5 +94,12 @@ export default function useTabsHint(emit) {
 
     provide('_wwTabsMissingTabOrFieldObj', missingTabOrField);
 
-    return { hintRegisterTab, hintUnregisterTab, hintChangeTabName, hintRegisterContent, hintUnregisterContent, hintChangeContentName };
+    return {
+        hintRegisterTab,
+        hintUnregisterTab,
+        hintChangeTabName,
+        hintRegisterContent,
+        hintUnregisterContent,
+        hintChangeContentName,
+    };
 }

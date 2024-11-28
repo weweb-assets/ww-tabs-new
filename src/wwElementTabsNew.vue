@@ -1,5 +1,5 @@
 <template>
-    <wwLayout path="tabContent" />
+    <wwLayout ref="tabs" path="tabContent" />
 </template>
 
 <script>
@@ -19,6 +19,7 @@ export default {
         wwElementState: { type: Object, required: true },
     },
     setup(props, { emit }) {
+        const tabs = ref(null);
         /* wwEditor:start */
         const {
             hintRegisterTab,
@@ -29,7 +30,6 @@ export default {
             hintChangeContentName,
         } = useTabsHint(emit);
         /* wwEditor:end */
-
 
         // Data
         const activeTab = ref(String(props.content.defaultActiveTab || ''));
@@ -87,23 +87,37 @@ export default {
             if (currentIndex === -1) return;
 
             if (event.key === prevKey) {
-                setFocusTab(getPreviousTabName(currentIndex));
+                setPrevActiveTab();
+                event.preventDefault();
             }
 
             if (event.key === nextKey) {
-                setFocusTab(getNextTabName(currentIndex));
+                setNextActiveTab();
+                event.preventDefault();
             }
-        };
+        }
 
-        // Event listeners
+        function enableListeners() {
+            console.log(tabs.value);
+            if (getFocusTab === '') {
+                tabs.value.$el.addEventListener('keydown', handleKeyDown);
+            }
+        }
+
+        function destroyListeners() {
+            tabs.value.$el.removeEventListener('keydown', handleKeyDown);
+        }
+
         onMounted(() => {
             wwLib.getFrontWindow().addEventListener('keydown', handleKeyDown);
         });
-        onUnmounted(() => {
-            wwLib.getFrontWindow().removeEventListener('keydown', handleKeyDown);
-        });
+        // onUnmounted(() => {
+        //     wwLib.getFrontWindow().removeEventListener('keydown', handleKeyDown);
+        // });
 
         // Providing data and methods to child components
+        provide('enableListeners', enableListeners);
+        provide('destroyListeners', destroyListeners);
         provide(
             'activationMode',
             computed(() => props.content.activationMode)
@@ -127,7 +141,7 @@ export default {
         provide('hintUnregisterTabTrigger', tabName => {
             hintUnregisterTab(tabName);
         });
-        provide('hintRegisterTabTrigger', (tabName) => {
+        provide('hintRegisterTabTrigger', tabName => {
             hintRegisterTab(tabName);
         });
         provide('hintRegisterTabContent', hintRegisterContent);
@@ -142,16 +156,43 @@ export default {
             {
                 goToNextTab: {
                     method: setNextActiveTab,
-                    editor: { label: 'Next', elementName: 'Tab', description: 'Go to the next tab', icon: 'arrow-right' },
+                    editor: {
+                        label: 'Next',
+                        elementName: 'Tab',
+                        description: 'Go to the next tab',
+                        icon: 'arrow-right',
+                    },
                 },
                 goToPrevTab: {
                     method: setPrevActiveTab,
-                    editor: { label: 'Previous', elementName: 'Tab', description: 'Go to the previous tab', icon: 'arrow-left' },
+                    editor: {
+                        label: 'Previous',
+                        elementName: 'Tab',
+                        description: 'Go to the previous tab',
+                        icon: 'arrow-left',
+                    },
+                },
+                goToTab: {
+                    method: setActiveTab,
+                    editor: {
+                        label: 'Open tab',
+                        elementName: 'Tab',
+                        description: 'Go to specific tab',
+                        icon: 'cursor-click',
+                        args: [
+                            {
+                                name: 'Tab name',
+                                type: 'any',
+                                required: true,
+                            },
+                        ],
+                    },
                 },
             }
         );
 
         return {
+            tabs,
             activeTab,
             setActiveTab,
 
