@@ -47,6 +47,7 @@ export default {
                 newValue: '',
                 oldValue: '',
             },
+            description: "Run when the selected value changes.",
         },
     ],
     actions: [
